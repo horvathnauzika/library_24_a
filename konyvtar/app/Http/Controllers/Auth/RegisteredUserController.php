@@ -23,7 +23,7 @@ class RegisteredUserController extends Controller
         $request->validate([
             'name' => ['required', 'string', 'max:255'],
             'email' => ['required', 'string', 'lowercase', 'email', 'max:255', 'unique:'.User::class],
-            'password' => ['required', 'confirmed', Rules\Password::defaults()],
+            'password' => ['required', Rules\Password::defaults()],
         ]);
 
         $user = User::create([
@@ -35,7 +35,7 @@ class RegisteredUserController extends Controller
         event(new Registered($user));
 
         $token = $user->createToken('auth_token')->plainTextToken;
-        
+
         return response()->json([
             'access_token' => $token,
             'token_type' => 'Bearer',
