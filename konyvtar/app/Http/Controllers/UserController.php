@@ -38,7 +38,9 @@ class UserController extends Controller
      */
     public function update(Request $request, string $id)
     {
-        //
+        $user =  User::find($id);
+        $user->fill($request->all());
+        $user->save();
     }
 
     /**
@@ -46,6 +48,6 @@ class UserController extends Controller
      */
     public function destroy(string $id)
     {
-        //
+        User::find($id)->delete();
     }
 }
