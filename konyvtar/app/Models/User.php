@@ -51,4 +51,7 @@ class User extends Authenticatable
         return $this->role === 0;
     }
 
+    public function userAndLendingsData(){
+        return $this->hasMany(Lending::class, 'user_id', 'id');
+    }
 }

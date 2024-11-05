@@ -28,4 +28,12 @@ class Lending extends Model
         return $query;
     }
 
+    public function copies(){  
+        return $this->belongsTo(Copy::class, 'copy_id', 'copy_id');   
+    }
+
+    public function specificDate(){  
+        return $this->belongsTo(User::class, 'user_id', 'id');   
+    }
+
 }

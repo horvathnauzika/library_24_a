@@ -2,7 +2,9 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\Book;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Auth;
 
 class BookController extends Controller
 {
@@ -45,4 +47,11 @@ class BookController extends Controller
     {
         //
     }
+
+    public function booksWithCopies(){
+        //$user = Auth::user();	//bejelentkezett felhasználó
+        return Book::with('copies') 
+        //->where('user_id','=',$user->id)
+        ->get(); 
+    } 
 }
