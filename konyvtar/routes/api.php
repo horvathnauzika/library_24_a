@@ -6,6 +6,8 @@ use App\Http\Controllers\BookController;
 use App\Http\Controllers\LendingController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
+use App\Http\Middleware\Librarian;
+use App\Http\Middleware\Warehouseman;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
 
@@ -15,17 +17,25 @@ Route::post('/register',[RegisteredUserController::class, 'store']);
 Route::post('/login',[AuthenticatedSessionController::class, 'store']);
 
 // összes kérés
-Route::apiResource('/users', UserController::class);
 Route::patch('update-password/{id}', [UserController::class, "updatePassword"]);
 
-// autentikált útvonal
+// autentikált útvonal, simple user is
 Route::middleware(['auth:sanctum'])
     ->group(function () {
-        Route::get('/user', function (Request $request) {
-            return $request->user();
-        });
-        Route::get('lendings-copies',[LendingController::class, 'lendingsWithCopies']);
-        Route::get('userLend',[UserController::class, 'userLendings']);
+        // profil elérése, módosítása
+        Route::get('/auth-user',[UserController::class, 'update']);
+        Route::get('/auth-user',[UserController::class, 'show']);
+        // Hány kölcsönzése volt idáig a bejelentkezett felhasználónak:
+        Route::get('/lendings-count', [LendingController::class, 'lendingCount']);
+        // Hány aktív kölcsönzése van
+        Route::get('/active-lendings-count', [LendingController::class, 'activelendingCount']);
+        // Hány k9nyvet kölcsönzött idáig
+        Route::get('/lendings-books-count', [LendingController::class, 'lendingsBooksCount']);
+        //kikölcsönzött könyvek adatai:
+        Route::get('/lendings-books-data', [LendingController::class, 'lendingsBooksData']);
+        
+        Route::get('/lendings-copies',[LendingController::class, 'lendingsWithCopies']);
+        Route::get('/userLend',[UserController::class, 'userLendings']);
         // Kijelentkezés útvonal
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
     });
@@ -33,9 +43,21 @@ Route::middleware(['auth:sanctum'])
 // admin útvonal
 Route::middleware(['auth:sanctum',Admin::class])
 ->group(function () {
-    Route::get('/admin/users', [UserController::class, 'index']);
-    Route::get('specific-date',[LendingController::class, 'dateSpecific']);
-    Route::get('specific-copy/{copy_id}',[LendingController::class, 'copySpecific']);
+    // összes kérés
+    Route::apiResource('/admin/users', UserController::class);
+    Route::get('/admin/specific-date',[LendingController::class, 'dateSpecific']);
+    Route::get('/admin/specific-copy/{copy_id}',[LendingController::class, 'copySpecific']);
 });
 
-Route::get('books-copies',[BookController::class, 'booksWithCopies']);
+// librarian útvonal
+Route::middleware(['auth:sanctum',Librarian::class])
+->group(function () {
+    // útvonalak
+    Route::get('/books-copies',[BookController::class, 'booksWithCopies']);
+});
+
+// raktáros útvonal
+Route::middleware(['auth:sanctum',Warehouseman::class])
+->group(function () {
+    // útvonalak
+});

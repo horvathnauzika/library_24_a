@@ -20,7 +20,7 @@ class DatabaseSeeder extends Seeder
         User::factory(20)->create();
         Book::factory(20)->create();
         Copy::factory(20)->create();
-        Lending::factory(10)->create();
+        Lending::factory(5)->create();
 
         /* User::factory()->create([
             'name' => 'Test User',

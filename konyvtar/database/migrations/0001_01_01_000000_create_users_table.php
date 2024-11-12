@@ -19,7 +19,7 @@ return new class extends Migration
             $table->string('email')->unique();
             $table->string('password');
             //0: admin, 1: user
-            $table->boolean('role')->default(1);
+            $table->boolean('role')->default(3);
             $table->timestamp('email_verified_at')->nullable();
             $table->rememberToken();
             $table->timestamps();
@@ -30,6 +30,13 @@ return new class extends Migration
         'email'=> 'admin@admin.hu', 
         'password' => Hash::make('admin12345'),
         'role' => 0
+        ]);
+
+        User::create([
+            'name'=>'librarian', 
+            'email'=> 'librarian@librarian.hu', 
+            'password' => Hash::make('librarian12345'),
+            'role' => 1
         ]);
 
         User::create([
