@@ -54,4 +54,8 @@ class User extends Authenticatable
     public function userAndLendingsData(){
         return $this->hasMany(Lending::class, 'user_id', 'id');
     }
+
+    public function usersAndReservations(){
+        return $this->hasMany(Reservation::class, 'user_id', 'id');
+    }
 }

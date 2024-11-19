@@ -4,6 +4,7 @@ use App\Http\Controllers\Auth\AuthenticatedSessionController;
 use App\Http\Controllers\Auth\RegisteredUserController;
 use App\Http\Controllers\BookController;
 use App\Http\Controllers\LendingController;
+use App\Http\Controllers\ReservationController;
 use App\Http\Controllers\UserController;
 use App\Http\Middleware\Admin;
 use App\Http\Middleware\Librarian;
@@ -36,6 +37,9 @@ Route::middleware(['auth:sanctum'])
         
         Route::get('/lendings-copies',[LendingController::class, 'lendingsWithCopies']);
         Route::get('/userLend',[UserController::class, 'userLendings']);
+        Route::get('/reserved-books', [ReservationController::class, 'reservedBooks']);
+        Route::get('/reserved-count', [ReservationController::class, 'reservedCount']);
+        Route::get('/reservations-i-have-from', [LendingController::class, 'reservationsIHaveFrom']);
         // Kijelentkezés útvonal
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
     });
@@ -53,7 +57,12 @@ Route::middleware(['auth:sanctum',Admin::class])
 Route::middleware(['auth:sanctum',Librarian::class])
 ->group(function () {
     // útvonalak
-    Route::get('/books-copies',[BookController::class, 'booksWithCopies']);
+    Route::get('/librarian/books-copies',[BookController::class, 'booksWithCopies']);
+    //Route::apiResource('/librarian/reservations',ReservationController::class);
+    Route::get('/librarian/reservations',[ReservationController::class, 'index']);
+    Route::get('/librarian/reservations/{user_id}/{book_id}/{start}',[ReservationController::class, 'show']);
+    Route::patch('/librarian/reservations/{user_id}/{book_id}/{start}',[ReservationController::class, 'update']);
+    Route::get('/librarian/users-and-reservations', [UserController::class, 'usersAndReservations']);
 });
 
 // raktáros útvonal

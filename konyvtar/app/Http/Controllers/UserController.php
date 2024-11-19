@@ -75,4 +75,9 @@ class UserController extends Controller
         ->where('id','=',$user->id)
         ->get(); 
     }
+
+    public function usersAndReservations(){
+        return User::with('usersAndReservations')
+        ->get();
+    }
 }

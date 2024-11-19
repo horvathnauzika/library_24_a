@@ -34,7 +34,7 @@ return new class extends Migration
 
         User::create([
             'name'=>'librarian', 
-            'email'=> 'librarian@librarian.hu', 
+            'email'=> 'librarian@akk.hu', 
             'password' => Hash::make('librarian12345'),
             'role' => 1
         ]);
