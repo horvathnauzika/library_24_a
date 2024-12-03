@@ -40,6 +40,9 @@ Route::middleware(['auth:sanctum'])
         Route::get('/reserved-books', [ReservationController::class, 'reservedBooks']);
         Route::get('/reserved-count', [ReservationController::class, 'reservedCount']);
         Route::get('/reservations-i-have-from', [LendingController::class, 'reservationsIHaveFrom']);
+        Route::patch('/bring-back/{copy_id}/{start}', [LendingController::class, 'bringBack']);
+        Route::patch('/bring-back2/{copy_id}/{start}', [LendingController::class, 'bringBack2']);
+
         // Kijelentkezés útvonal
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
     });

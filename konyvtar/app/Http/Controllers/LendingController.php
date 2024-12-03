@@ -85,7 +85,7 @@ class LendingController extends Controller
         return $lendings;
     }
 
-    // aktív k9lcs9nzések
+    // aktív kölcsönzések
     public function activelendingCount(){
         $user = Auth::user();
         $lendings = DB::table('lendings as l')
@@ -131,6 +131,35 @@ class LendingController extends Controller
         ->whereRaw('DATEDIFF(CURRENT_DATE, start) > 21')
         ->get();
         return $books;
+    }
+
+    // december 3
+    public function bringBack($copy_id, $start){
+        // Bejelentkezett felhasználó
+        $user = Auth::user();
+        // Melyik kölcsönzésről van szó
+        $lending = $this->show($user->id, $copy_id, $start);
+        // Könyv visszahozása
+        $lending->end=date(now());
+        // Rekord mentése
+        $lending->save();
+        // 2. esemény, ami szintén patch!!
+        DB::table('copies')
+        ->where('copy_id', $copy_id)
+        // az update-ben benne van a mentés is
+        ->update(['status' => 0]);
+    }
+
+    public function bringBack2($copy_id, $start){
+        // Bejelentkezett felhasználó
+        $user = Auth::user();
+        // Melyik kölcsönzésről van szó
+        $lending = $this->show($user->id, $copy_id, $start);
+        // Könyv visszahozása
+        $lending->end=date(now());
+        // Rekord mentése
+        $lending->save();
+        DB::select('CALL toLibrary(?)', array($copy_id));
     }
 
 }
