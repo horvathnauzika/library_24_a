@@ -63,13 +63,12 @@ class ReservationController extends Controller
         ->get();
     }
 
-
-    // Hány db előjegyzés van a bejelentkezett felhasználónak?
-    public function reservedCount(){
+    // hány előjegyzés / bejelentkezett felhasználó
+    public function reservationsCount(){
         $user = Auth::user();
-        $pieces = DB::table('reservations')
+        $reservation = DB::table('reservations as r')
         ->where('user_id', $user->id)
         ->count();
-        return $pieces;
+        return $reservation;
     }
 }

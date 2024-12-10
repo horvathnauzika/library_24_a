@@ -162,4 +162,7 @@ class LendingController extends Controller
         DB::select('CALL toLibrary(?)', array($copy_id));
     }
 
+    public function ketHonapjaNemVisszahozottaK(){
+        
+    }
 }

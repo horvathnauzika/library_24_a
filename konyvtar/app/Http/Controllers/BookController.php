@@ -5,6 +5,7 @@ namespace App\Http\Controllers;
 use App\Models\Book;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Auth;
+use Illuminate\Support\Facades\DB;
 
 class BookController extends Controller
 {
@@ -53,5 +54,15 @@ class BookController extends Controller
         return Book::with('copies') 
         //->where('user_id','=',$user->id)
         ->get(); 
-    } 
+    }
+
+    // Határozd meg a könyvtár nyilvántartásában legalább 2 könyvvel rendelkező szerzőket!
+    public function szerzokLegalabbKetKonyv(){
+        $szerzok = DB::table('books')
+            ->select('author', DB::raw('count(*) as book_count'))
+            ->groupBy('author')
+            ->having('book_count', '>=', 2)
+            ->get();
+        return $szerzok;
+    }
 }

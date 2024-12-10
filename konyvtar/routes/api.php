@@ -16,7 +16,7 @@ use Illuminate\Support\Facades\Route;
 // bárki által elérhető
 Route::post('/register',[RegisteredUserController::class, 'store']);
 Route::post('/login',[AuthenticatedSessionController::class, 'store']);
-
+Route::get('/authors-at-least-two-books', [BookController::class, 'szerzokLegalabbKetKonyv']);
 // összes kérés
 Route::patch('update-password/{id}', [UserController::class, "updatePassword"]);
 
@@ -42,9 +42,11 @@ Route::middleware(['auth:sanctum'])
         Route::get('/reservations-i-have-from', [LendingController::class, 'reservationsIHaveFrom']);
         Route::patch('/bring-back/{copy_id}/{start}', [LendingController::class, 'bringBack']);
         Route::patch('/bring-back2/{copy_id}/{start}', [LendingController::class, 'bringBack2']);
-
+        Route::get('/reservations-count', [ReservationController::class, 'reservationsCount']);
         // Kijelentkezés útvonal
         Route::post('/logout', [AuthenticatedSessionController::class, 'destroy']);
+            
+ 
     });
 
 // admin útvonal
@@ -67,6 +69,7 @@ Route::middleware(['auth:sanctum',Librarian::class])
     Route::patch('/librarian/reservations/{user_id}/{book_id}/{start}',[ReservationController::class, 'update']);
     Route::get('/librarian/users-and-reservations', [UserController::class, 'usersAndReservations']);
     Route::post('/librarian/store-lending', [LendingController::class, 'store']);
+
 });
 
 // raktáros útvonal
